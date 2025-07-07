@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GOVPAL – DHS Demo</title>
+  <style>
+    /* USCIS Branding Colors & Fonts */
+    :root {
+      --primary-blue: #002e5d;
+      --accent-gold: #ffd100;
+      --text-dark: #002e5d;
+    }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+    .header {
+      background: var(--primary-blue);
+      color: white;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .header img {
+      height: 48px;
+      cursor: pointer;
+    }
+    .header-title {
+      flex-grow: 1;
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 32px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .header button {
+      background: var(--accent-gold);
+      color: var(--primary-blue);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+    .header button:hover {
+      background: #e6c800;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto 80px;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: var(--primary-blue);
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+    button.main {
+      background: var(--accent-gold);
+      color: var(--primary-blue);
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      margin: 8px 0;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button.main:hover {
+      background: #e6c800;
+    }
+    input[type="text"], input[type="password"], input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .footer {
+      position: absolute;
+      bottom: 8px;
+      left: 16px;
+      font-size: 12px;
+      font-style: italic;
+      color: #555;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body onload="initializeApp()">
+
+  <div class="header">
+    <img src="uscis_logo.png" alt="USCIS Logo" onclick="showPage('dashboard')">
+    <div class="header-title">
+      GOVPAL – GOVERNMENT OPERATIONS VIRTUAL PLATFORM FOR ASSISTANCE & LEARNING
+    </div>
+    <button onclick="goBack()">Back</button>
+  </div>
+
+  <!-- Login Page -->
+  <div class="container" id="login">
+    <h1>Login to GOVPAL</h1>
+    <input type="text" placeholder="Username" id="username"/>
+    <input type="password" placeholder="Password" id="password"/>
+    <button class="main" onclick="attemptLogin()">Login</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="container hidden" id="dashboard">
+    <h1>Home Dashboard</h1>
+    <p>Select an action:</p>
+    <button class="main" onclick="showPage('upload')">File New Form</button>
+    <button class="main" onclick="showPage('retrieve')">Retrieve My Information</button>
+    <button class="main" onclick="showPage('guide')">How-To Guides</button>
+    <button class="main" onclick="showPage('chat')">Open GOVPAL Chat</button>
+    <button class="main" onclick="showPage('naturalization-process')">Start Naturalization Process</button>
+  </div>
+
+  <!-- Upload Document -->
+  <div class="container hidden" id="upload">
+    <h1>Upload Document</h1>
+    <input type="file" id="fileInput"/>
+    <button class="main" onclick="showPage('review')">Process Document</button>
+  </div>
+
+  <!-- Review Extracted Data -->
+  <div class="container hidden" id="review">
+    <h1>Review Extracted Data</h1>
+    <p>Example data extracted from uploaded form.</p>
+    <button class="main" onclick="showPage('dashboard')">Submit to USCIS</button>
+  </div>
+
+  <!-- Retrieve My Information -->
+  <div class="container hidden" id="retrieve">
+    <h1>My Case Status</h1>
+    <p><strong>Case Number:</strong> YSC1234567890</p>
+    <p><strong>Status:</strong> Pending Interview Scheduling</p>
+    <p><strong>Next Steps:</strong> Await notice for interview date.</p>
+    <button class="main" onclick="showPage('dashboard')">Back to Dashboard</button>
+  </div>
+
+  <!-- How-To Guides -->
+  <div class="container hidden" id="guide">
+    <h1>Renewing Your Green Card</h1>
+    <ol>
+      <li>Complete Form I-90</li>
+      <li>Gather required documents</li>
+      <li>Submit application fee</li>
+      <li>Schedule biometrics appointment</li>
+      <li>Await USCIS decision</li>
+    </ol>
+    <button class="main" onclick="showPage('dashboard')">Back to Dashboard</button>
+  </div>
+
+  <!-- Chat Page -->
+  <div class="container hidden" id="chat">
+    <h1>GOVPAL Chat</h1>
+    <div style="margin-bottom:12px;">Select a prompt:</div>
+    <button class="main" onclick="showResponse('overview')">How do I start the naturalization process?</button>
+    <button class="main" onclick="showResponse('requirements')">What are the eligibility requirements?</button>
+    <button class="main" onclick="showResponse('timeline')">How long does naturalization take?</button>
+    <button class="main" onclick="showPage('dashboard')">Back to Dashboard</button>
+  </div>
+
+  <!-- Chat Response Page -->
+  <div class="container hidden" id="chat-response">
+    <h1>GOVPAL Response</h1>
+    <div id="response-text" style="margin-bottom:16px;"></div>
+    <button class="main" onclick="showPage('chat')">Back to Chat</button>
+  </div>
+
+  <!-- Starting Naturalization Process -->
+  <div class="container hidden" id="naturalization-process">
+    <h1>Starting the Naturalization Process</h1>
+    <p>File Form N-400, pay the fee, and schedule biometrics.</p>
+    <button class="main" onclick="showPage('n400-form')">Start Application</button>
+  </div>
+
+  <!-- N-400 Form Page -->
+  <div class="container hidden" id="n400-form">
+    <h1>N-400 Application Form</h1>
+    <input type="text" placeholder="Full Name">
+    <input type="text" placeholder="Date of Birth">
+    <input type="text" placeholder="Country of Birth">
+    <button class="main" onclick="showPage('biometrics')">Submit</button>
+  </div>
+
+  <!-- Biometrics & Fee Page -->
+  <div class="container hidden" id="biometrics">
+    <h1>Biometrics & Application Fee</h1>
+    <input type="text" placeholder="Preferred Biometrics Date">
+    <input type="text" placeholder="Payment Method">
+    <button class="main" onclick="showPage('case-status')">Submit</button>
+  </div>
+
+  <!-- Updated Case Status -->
+  <div class="container hidden" id="case-status">
+    <h1>My Case Status</h1>
+    <p><strong>Case Number:</strong> YSC1234567890</p>
+    <p><strong>Status:</strong> Pending Biometric Results</p>
+    <p><strong>Next Steps:</strong> Biometric Appointment scheduled and Application Fee paid. Further instructions to be provided after receival of Biometric Test results.</p>
+    <button class="main" onclick="showPage('dashboard')">Back to Dashboard</button>
+  </div>
+
+  <div class="footer">
+    Powered by Deloitte
+  </div>
+
+  <script>
+    let historyStack = [];
+
+    function initializeApp() {
+      historyStack = [];
+      showPage('login', false);
+    }
+
+    function showPage(id, push = true) {
+      hideAll();
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('hidden');
+      if (push) historyStack.push(id);
+    }
+
+    function hideAll() {
+      document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+    }
+
+    function goBack() {
+      if (historyStack.length < 2) return;
+      historyStack.pop();              // remove current
+      const prev = historyStack.pop(); // previous
+      showPage(prev);
+    }
+
+    function attemptLogin() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      if (u && p) {
+        showPage('dashboard');
+      } else {
+        alert('Please enter username and password.');
+      }
+    }
+
+    function showResponse(type) {
+      let txt = '';
+      if (type === 'overview') {
+        txt = '<p>File Form N-400 online or by mail, pay the fee, and schedule biometrics.</p>';
+      } else if (type === 'requirements') {
+        txt = '<p>Must be 18+, permanent resident for 5 years (3 if married), good moral character, pass English & civics tests.</p>';
+      } else if (type === 'timeline') {
+        txt = '<p>Typically 12–18 months from application to oath ceremony.</p>';
+      }
+      document.getElementById('response-text').innerHTML = txt;
+      showPage('chat-response');
+    }
+  </script>
+
+</body>
+</html>

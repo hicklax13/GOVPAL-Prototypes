@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GOVPAL – DHS Demo</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      min-height: 100vh;
+    }
+    .header {
+      background: #00274c;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header img {
+      height: 50px;
+      cursor: pointer;
+    }
+    .header button {
+      background: #0071bc;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .header button:hover {
+      background: #005a9c;
+    }
+    .header-title {
+      flex-grow: 1;
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto 60px auto; /* space for footer */
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #00274c;
+      margin-bottom: 20px;
+    }
+    button.main {
+      background: #0071bc;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      margin: 10px 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button.main:hover {
+      background: #005a9c;
+    }
+    a {
+      color: #0071bc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 12px;
+      font-style: italic;
+      color: #555;
+    }
+    input[type="text"], input[type="password"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .hidden { display: none; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    .avatar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .avatar-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0071bc, #00274c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+      margin-right: 15px;
+      box-shadow: 0 0 10px rgba(0,113,188,0.6);
+    }
+    .chat-prompt {
+      background: #e9edf3;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .chat-prompt:hover {
+      background: #d0d6dc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <img src="uscis_logo.png" alt="USCIS Logo" onclick="goToDashboard()">
+  <div class="header-title">
+    GOVPAL – Government Operations Virtual Platform for Assistance & Learning
+  </div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- Login Page -->
+<div class="container" id="login">
+  <h1>Login to GOVPAL</h1>
+  <input type="text" placeholder="Username" id="username"/><br/>
+  <input type="password" placeholder="Password" id="password"/><br/>
+  <button class="main" onclick="showDashboard()">Login</button>
+</div>
+
+<!-- Dashboard -->
+<div class="container hidden" id="dashboard">
+  <h1>Home Dashboard</h1>
+  <p>Welcome to GOVPAL. Select an action to begin.</p>
+  <button class="main" onclick="showUpload()">File New Form</button><br/>
+  <button class="main" onclick="showRetrieve()">Retrieve My Information</button><br/>
+  <button class="main" onclick="showGuide()">How-To Guides</button><br/>
+  <button class="main" onclick="showChat()">Open GOVPAL Chat</button>
+</div>
+
+<!-- Upload Document -->
+<div class="container hidden" id="upload">
+  <h1>Upload Document</h1>
+  <input type="file" id="fileInput" /><br/>
+  <button class="main" onclick="processDoc()">Process Document</button>
+</div>
+
+<!-- Review Extracted Data -->
+<div class="container hidden" id="review">
+  <h1>Review Extracted Data</h1>
+  <table>
+    <tr><th>Field</th><th>Value</th></tr>
+    <tr><td>Name</td><td>John Doe</td></tr>
+    <tr><td>DOB</td><td>01/01/1990</td></tr>
+    <tr><td>Case Number</td><td>YSC1234567890</td></tr>
+    <tr><td>Address</td><td>123 Main St, Springfield</td></tr>
+  </table>
+  <button class="main" onclick="showDashboard()">Submit to USCIS</button>
+</div>
+
+<!-- Retrieve My Information -->
+<div class="container hidden" id="retrieve">
+  <h1>My Case Status</h1>
+  <p><strong>Case Number:</strong> YSC1234567890</p>
+  <p><strong>Status:</strong> Pending Interview Scheduling</p>
+  <p><strong>Next Steps:</strong> Await notice for interview date.</p>
+  <button class="main" onclick="showDashboard()">Back to Dashboard</button>
+</div>
+
+<!-- How-To Guides -->
+<div class="container hidden" id="guide">
+  <h1>Renewing Your Green Card</h1>
+  <ol>
+    <li>Complete Form I-90</li>
+    <li>Gather required documents</li>
+    <li>Submit application fee</li>
+    <li>Schedule biometrics appointment</li>
+    <li>Await USCIS decision</li>
+  </ol>
+  <button class="main" onclick="showDashboard()">Back to Dashboard</button>
+</div>
+
+<!-- Chat Page -->
+<div class="container hidden" id="chat">
+  <div class="avatar">
+    <div class="avatar-icon">🤖</div>
+    <div><strong>GOVPAL AI Assistant</strong><br/>How can I help you today?</div>
+  </div>
+  <div class="chat-prompt" onclick="showNaturalizationResponse('overview')">How do I start the naturalization process?</div>
+  <div class="chat-prompt" onclick="showNaturalizationResponse('requirements')">What are the eligibility requirements?</div>
+  <div class="chat-prompt" onclick="showNaturalizationResponse('timeline')">How long does naturalization take?</div>
+  <button class="main" onclick="showDashboard()">Back to Dashboard</button>
+</div>
+
+<!-- Chat Response Page -->
+<div class="container hidden" id="chat-response">
+  <div class="avatar">
+    <div class="avatar-icon">🤖</div>
+    <div><strong>GOVPAL AI Assistant</strong></div>
+  </div>
+  <div id="response-text"></div>
+  <button class="main" onclick="showChat()">Back to Chat</button>
+</div>
+
+<div class="footer">
+  Powered by Deloitte
+</div>
+
+<script>
+function showDashboard() {
+  const username = document.getElementById('username') ? document.getElementById('username').value : true;
+  const password = document.getElementById('password') ? document.getElementById('password').value : true;
+  if(username && password){
+    hideAll();
+    document.getElementById('dashboard').classList.remove('hidden');
+  } else {
+    alert("Please enter username and password.");
+  }
+}
+
+function goToDashboard() {
+  hideAll();
+  document.getElementById('dashboard').classList.remove('hidden');
+}
+
+function showUpload() { hideAll(); document.getElementById('upload').classList.remove('hidden'); }
+function processDoc() { hideAll(); document.getElementById('review').classList.remove('hidden'); }
+function showRetrieve() { hideAll(); document.getElementById('retrieve').classList.remove('hidden'); }
+function showGuide() { hideAll(); document.getElementById('guide').classList.remove('hidden'); }
+function showChat() { hideAll(); document.getElementById('chat').classList.remove('hidden'); }
+
+function showNaturalizationResponse(type) {
+  hideAll();
+  let text = "";
+  if (type === 'overview') {
+    text = "<h1>Starting the Naturalization Process</h1><p>To start, file Form N-400 online or via mail with USCIS, pay the application fee, and schedule your biometrics appointment.</p>";
+  } else if (type === 'requirements') {
+    text = "<h1>Eligibility Requirements</h1><p>You must be at least 18 years old, have been a permanent resident for 5 years (3 if married to a US citizen), demonstrate good moral character, and pass the English and civics tests.</p>";
+  } else if (type === 'timeline') {
+    text = "<h1>Naturalization Timeline</h1><p>Processing times vary by location but generally take between 12-18 months from application submission to oath ceremony.</p>";
+  }
+  document.getElementById('response-text').innerHTML = text;
+  document.getElementById('chat-response').classList.remove('hidden');
+}
+
+function goBack() {
+  window.history.back();
+}
+
+function hideAll() {
+  document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+}
+</script>
+
+</body>
+</html>

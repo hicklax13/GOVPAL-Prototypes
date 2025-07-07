@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GOVPAL – DHS Demo</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      min-height: 100vh;
+    }
+    .header {
+      background: #00274c;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .header img {
+      height: 50px;
+      cursor: pointer;
+    }
+    .header button {
+      background: #0071bc;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .header button:hover {
+      background: #005a9c;
+    }
+    .header-title {
+      flex-grow: 1;
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 28px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #00274c;
+      margin-bottom: 20px;
+    }
+    button.main {
+      background: #0071bc;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      margin: 10px 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button.main:hover {
+      background: #005a9c;
+    }
+    input[type="text"], input[type="password"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 12px;
+      font-style: italic;
+      color: #555;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body onload="initializeApp()">
+
+<div class="header">
+  <img src="uscis_logo.png" alt="USCIS Logo" onclick="goToDashboard()">
+  <div class="header-title">
+    GOVPAL – GOVERNMENT OPERATIONS VIRTUAL PLATFORM FOR ASSISTANCE & LEARNING
+  </div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- Starting Naturalization Process Page -->
+<div class="container" id="naturalization-process">
+  <h1>Starting the Naturalization Process</h1>
+  <p>To start, file Form N-400 online or via mail with USCIS, pay the application fee, and schedule your biometrics appointment.</p>
+  <button class="main" onclick="showN400Form()">Start Application</button>
+</div>
+
+<!-- N-400 Form Page -->
+<div class="container hidden" id="n400-form">
+  <h1>N-400 Application Form</h1>
+  <input type="text" placeholder="Full Name"><br/>
+  <input type="text" placeholder="Date of Birth"><br/>
+  <input type="text" placeholder="Country of Birth"><br/>
+  <button class="main" onclick="showBiometrics()">Submit</button>
+</div>
+
+<!-- Biometrics Appointment & Fee Page -->
+<div class="container hidden" id="biometrics">
+  <h1>Biometrics & Application Fee</h1>
+  <input type="text" placeholder="Preferred Biometrics Appointment Date"><br/>
+  <input type="text" placeholder="Payment Method"><br/>
+  <button class="main" onclick="updateCaseStatus()">Submit</button>
+</div>
+
+<!-- My Case Status Page -->
+<div class="container hidden" id="case-status">
+  <h1>My Case Status</h1>
+  <p><strong>Case Number:</strong> YSC1234567890</p>
+  <p><strong>Status:</strong> Pending Biometric Results</p>
+  <p><strong>Next Steps:</strong> Biometric Appointment scheduled and Application Fee paid. Further instructions to be provided after receival of Biometric Test results.</p>
+  <button class="main" onclick="goToDashboard()">Back to Dashboard</button>
+</div>
+
+<div class="footer">
+  Powered by Deloitte
+</div>
+
+<script>
+function initializeApp() {
+  hideAll();
+  document.getElementById('naturalization-process').classList.remove('hidden');
+}
+
+function hideAll() {
+  document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+}
+
+function goBack() {
+  window.history.back();
+}
+
+function goToDashboard() {
+  hideAll();
+  document.getElementById('naturalization-process').classList.remove('hidden');
+}
+
+function showN400Form() {
+  hideAll();
+  document.getElementById('n400-form').classList.remove('hidden');
+}
+
+function showBiometrics() {
+  hideAll();
+  document.getElementById('biometrics').classList.remove('hidden');
+}
+
+function updateCaseStatus() {
+  hideAll();
+  document.getElementById('case-status').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
